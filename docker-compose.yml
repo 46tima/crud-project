@@ -12,5 +12,11 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-volumes:
-  pg_data:
+  api:
+    build: ./backend
+    container_name: crud_api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
