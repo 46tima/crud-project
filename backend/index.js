@@ -27,3 +27,21 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
+
+app.post("/init", async (req, res) => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        status TEXT DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    res.json({ status: "table created" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "init failed" });
+  }
+});
